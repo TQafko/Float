@@ -1,0 +1,221 @@
+const char PAGE_MAIN[] PROGMEM = R"=====(
+<!DOCTYPE html><html>
+  <head>
+  <title>MC Server</title>
+  <meta name='viewport' content='user-scalable=yes,initial-scale=1.0,width=device-width'>
+  <style>
+    body{max-width:65%;margin:0 auto;font-family:arial;font-size:100%;}
+    /* ul{list-style-type:none;padding:0;border-radius:0em;overflow:hidden;background-color:#d90707;font-size:1em;}
+    li{float:left;border-radius:0em;border-right:0em solid #bbb;}
+    li a{color:white; display: block;border-radius:0.375em;padding:0.44em 0.44em;text-decoration:none;font-size:100%}
+    li a:hover{background-color:#e86b6b;border-radius:0em;font-size:100%}
+    li button:hover{background-color:#e86b6b;border-radius:0em;font-size:100%}
+    h1{color:white;border-radius:0em;font-size:1.5em;padding:0.2em 0.2em;background:#d90707;}
+    h2{color:blue;font-size:0.8em;}
+    h3{font-size:0.8em;}
+    table{font-family:arial,sans-serif;font-size:0.9em;border-collapse:collapse;width:85%;} 
+    th,td {border:0.06em solid #dddddd;text-align:left;padding:0.3em;border-bottom:0.06em solid #dddddd;} 
+    tr:nth-child(odd) {background-color:#eeeeee;}
+    .rcorners_n {border-radius:0.5em;background:#558ED5;padding:0.3em 0.3em;width:20%;color:white;font-size:75%;}
+    .rcorners_m {border-radius:0.5em;background:#558ED5;padding:0.3em 0.3em;width:50%;color:white;font-size:75%;}
+    .rcorners_w {border-radius:0.5em;background:#558ED5;padding:0.3em 0.3em;width:70%;color:white;font-size:75%;}
+    .column{float:left;width:50%;height:45%;}
+    .row:after{content:'';display:table;clear:both;}
+    *{box-sizing:border-box;}
+    a{font-size:75%;}
+    p{font-size:75%;} */
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  </style>
+  </head>
+
+  <body>
+    <h1>Wentworth Float Team</h1>
+    <ul>
+      <li><a href='/'>Files</a></li> //Menu bar with commands
+      <li><a href='/upload' >Configuration</a></li> 
+      <li><button id="data" onclick="ButtonPress0()">Datalog Toggle</button></li> 
+      <li><button id= "motor" onclick="ButtonPress1()">Motor CW</button></li> 
+      <li><button id= "CW" onclick="CW()">CW</button></li> 
+      <li><button id= "CCW" onclick="CCW()">CCW</button></li> 
+      <li><button id= "MotorDisable" onclick="MotorDisable()">MotorDisable</button></li> 
+      <li><button id= "xml" onclick="loadXMLDoc()">GetXML</button></li> 
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round">Testing</span>
+      </label>
+    </ul>
+    <br><br>
+    <table id="id"></table>
+  </body>
+  
+  <script type = "text/javascript">
+    // href='/motortoggle' 
+    // global variable visible to all java functions
+    var xmlHttp=createXmlHttpObject();
+
+    // function to create XML object
+    function createXmlHttpObject(){
+      if(window.XMLHttpRequest){
+        xmlHttp=new XMLHttpRequest();
+      } else {
+        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      return xmlHttp;
+    }
+    let count = 1;
+    function ButtonPress0() {
+      var xhttp = new XMLHttpRequest(); 
+      var message;
+      if(count == 1){
+        document.getElementById("data").style.backgroundColor = "green";
+        document.getElementById("data").innerHTML = "DataToggle On";
+        console.log("Data Toggled on!");
+        count = 0;
+      } else if (count == 0){
+        document.getElementById("data").style.backgroundColor = "grey";
+        document.getElementById("data").innerHTML = "DataToggle Off";
+        console.log("Data Toggled off!");
+        count = 1;
+      }
+      xhttp.open("PUT", "datalog", false);
+      console.log(xhttp);
+      console.log("Logging Data Toggle");
+      xhttp.send();
+    }
+
+    function ButtonPress1() {
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "motortoggle", false);
+      console.log(xhttp);
+      console.log("Motor Toggle");
+      xhttp.send(); 
+    }
+
+    function CW(){
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "CW", false);
+      console.log(xhttp);
+      console.log("Motor CW");
+      xhttp.send(); 
+    }
+
+    function CCW(){
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "CCW", false);
+      console.log(xhttp);
+      console.log("Motor CCW");
+      xhttp.send(); 
+    }
+
+    function MotorDisable(){
+      var xhttp = new XMLHttpRequest(); 
+      xhttp.open("PUT", "MotorDisable", false);
+      console.log(xhttp);
+      console.log("Motor Disable");
+      xhttp.send(); 
+    }
+
+    function loadXMLDoc() {
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            empDetails(this);
+        }
+      };
+
+      // employee.xml is the external xml file
+      xmlhttp.open("GET", "/xml", true);
+      xmlhttp.send();
+  }
+
+  function empDetails(xml) {
+    let i;
+    let xmlDoc = xml.responseXML;
+    let table =
+      `<tr><th>B0</th>
+        <th>B1</th><th>Temp</th>
+        <th>Pressure</th><th>Depth</th>
+      </tr>`;
+    let x = xmlDoc.getElementsByTagName("Data");
+
+    // Start to fetch the data by using TagName 
+    for (i = 0; i < x.length; i++) {
+      table += "<tr><td>" +
+        x[i].getElementsByTagName("B0")[0]
+            .childNodes[0].nodeValue + "</td><td>" +
+        x[i].getElementsByTagName("B1")[0]
+            .childNodes[0].nodeValue + "</td><td>" +
+        x[i].getElementsByTagName("Temp")[0]
+            .childNodes[0].nodeValue + "</td><td>" +
+        x[i].getElementsByTagName("Pressure")[0]
+            .childNodes[0].nodeValue + "</td><td>" +
+        x[i].getElementsByTagName("Depth")[0]
+            .childNodes[0].nodeValue + "</td></tr>";
+    }
+    // Print the xml data in table form
+    document.getElementById("id").innerHTML = table;
+  }
+  </script>
+  </html>
+  )=====";
