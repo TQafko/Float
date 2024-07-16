@@ -12,4 +12,6 @@ The Buoyancy Engine is a device designed to control the buoyancy of underwater v
 ## Image:
 <img src="https://github.com/user-attachments/assets/11ce497b-231d-4918-8d91-b0ea17075d6c" width="200"/>
 
-First C++ version using ESP-IDF: https://github.com/WIT-IEEE-MATE-ROV/Float2024
+### Continued C++ versions using ESP-IDF:
+- First Configuration: https://github.com/TQafko/HTTP-server-ESP_IDF-configuration
+- Team Development: https://github.com/WIT-IEEE-MATE-ROV/Float2024
